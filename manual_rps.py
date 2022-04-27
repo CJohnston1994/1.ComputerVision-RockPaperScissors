@@ -2,11 +2,9 @@
 import random
 
 options = ['Rock', 'Paper', 'Scissors']
-weakness = ['Paper', 'Scissors', 'Rock']
 
 def get_user_choice():
     choice = input("Rock, paper or scissors? ")
-    #capitalize_Choice  = choice.capitalize()
     if choice.capitalize() in options:
         return choice.capitalize()
     else:
