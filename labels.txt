@@ -1,4 +1,0 @@
-Rock
-Paper
-Scissors
-None
