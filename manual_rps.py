@@ -1,11 +1,14 @@
 # function for  rock paper scissors
 import random
+import time
 
 options = ['Rock', 'Paper', 'Scissors']
 
-def get_user_choice():
-    choice = input("Rock, paper or scissors? ")
-    if choice.capitalize() in options:
+def get_user_choice(prediction):
+    #choice = input("Rock, paper or scissors? ")
+    start_time = time.time()
+    choice = prediction
+    if choice != 'None':
         return choice.capitalize()
     else:
         print('please try again')
@@ -28,9 +31,7 @@ def get_Winner(user_Choice, computer_Choice):
     else:
         print('You Win')
 
-def play():
-    user_Choice = get_user_choice()
+def play(prediction):
+    user_Choice = get_user_choice(prediction)
     computer_Choice  = get_computer_choice()
     get_Winner(user_Choice, computer_Choice)
-
-play()
