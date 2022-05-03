@@ -7,9 +7,9 @@ options = ['Rock', 'Paper', 'Scissors']
 def get_user_choice(prediction):
     #choice = input("Rock, paper or scissors? ")
     start_time = time.time()
-    choice = prediction
-    if choice != 'None':
-        return choice.capitalize()
+    
+    if prediction != 'None':
+        return prediction
     else:
         print('please try again')
         get_user_choice()
