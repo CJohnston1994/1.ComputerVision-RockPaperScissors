@@ -2,13 +2,11 @@
 from typing import Text
 from classes import TextBox
 import random
-from time  import time
 
 options = ['Rock', 'Paper', 'Scissors']
 
 def get_user_choice(prediction):
     #choice = input("Rock, paper or scissors? ")
-    start_time = time.time()
     
     if prediction != 'None':
         return options[prediction]
@@ -46,7 +44,7 @@ def grand_Winner(frame, best_of, score):
     if best_of == 0 and score[0]>score[1]:
         you_lose = TextBox(frame, f"you lost {score[1]} to {score[0]}")
 
-def intro(frame):
+'''def intro(frame):
     intro_box1= TextBox(frame, "Welcome to Rock, Paper... Scissors!")
     intro_box2= TextBox(frame, "Can you beat the most sophistocated AI Imaginabl?")
     intro_box3= TextBox(frame, "Muahahahahahahaha")
@@ -54,5 +52,5 @@ def intro(frame):
     intro_box1.write()
     intro_box2.write()
     intro_box3.write()
-
+'''
 
