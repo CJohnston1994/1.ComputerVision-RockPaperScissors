@@ -1,7 +1,6 @@
 from keras.models import load_model
 import cv2 as cv2, numpy as np
-import math, camera_rps, manual_rps
-from classes import TextBox
+import camera_rps, manual_rps
 from time import time
 
 # Load model, prep for video cap and create data array for preictive model
@@ -15,6 +14,9 @@ best_of = 3
 # initialize scoreand message Counter
 score  = [0,0]
 
+def frame_write(frame, text, message_height):
+    img = cv2.putText(frame, text, (50, 50*message_height), cv2.FONT_HERSHEY_SIMPLEX,  1, (147, 101, 26), 2, cv2.LINE_AA )
+
 def game_Loop():
     '''game_timer = timer - time()
     round_count  = 0
@@ -22,8 +24,8 @@ def game_Loop():
         start = int(time())
         while timer < 3:
             print("also Got  Here!")
-            count_down_timer = TextBox(frame, f"count",3)
-            img = count_down_timer.write()
+            count_down_timer = frame_write(frame, f"count",3)
+            img = count_down_timer
         user_Choice = manual_rps.get_user_choice(prediction)
         computer_Choice  = manual_rps.get_computer_choice()
         manual_rps.get_Winner(user_Choice, computer_Choice, score)
@@ -41,32 +43,22 @@ while True:
     prediction = model.predict(data)
     
     #text box to show current prediction
-    begin = TextBox(frame, "Press \'s\' to begin the game", 1)
-    img  = begin.write()
+    img  = frame_write(frame, "Press \'s\' to begin the game", 1)
     
     # show the frame
+    int_time = int(time())
+    t_end = int_time + 10
+    count = int_time
+    mins, secs = divmod(t_end - count, 60)
+    timer_display = '{:02d}:{:02d}'.format(mins, secs)
+  
+    img = frame_write(frame, f"{timer_display}", 2)
+    
     cv2.imshow('frame', frame)
-
-    #Begin  the game
-    game_Loop()
-    manual_rps.grand_Winner(frame, best_of, score)
-
+    
     # Press q to close the window
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-    if cv2.waitKey(1) & 0xFF == ord('s'):
-        begin.remove()
-        t_end = int(time()) + 10
-        count = int(math.floor(time()))
-        timertext = f"{divmod(60, count-time())}"
-        TimerTxt = TextBox(frame, timertext, 1)
-        print(count)
-        if t_end > count:
-            TimerTxt.write()
-        else:
-            game_Loop()
-
-
 
 # After the loop release the cap object
 cap.release()

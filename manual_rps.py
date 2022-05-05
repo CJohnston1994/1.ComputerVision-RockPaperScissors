@@ -37,20 +37,9 @@ def get_Winner(user_Choice, computer_Choice, score):
         return [score[0]+1,score[1]]
 
 def grand_Winner(frame, best_of, score):
-    if best_of == 0 and score[0]>score[1]:
-        you_win = TextBox(frame, f"you won {score[0]} to {score[1]}")
-    if best_of == 0 and score[0]>score[1]:
-        you_draw = TextBox(frame, f"you drew with {score[0]} points each")
-    if best_of == 0 and score[0]>score[1]:
-        you_lose = TextBox(frame, f"you lost {score[1]} to {score[0]}")
-
-'''def intro(frame):
-    intro_box1= TextBox(frame, "Welcome to Rock, Paper... Scissors!")
-    intro_box2= TextBox(frame, "Can you beat the most sophistocated AI Imaginabl?")
-    intro_box3= TextBox(frame, "Muahahahahahahaha")
-
-    intro_box1.write()
-    intro_box2.write()
-    intro_box3.write()
-'''
-
+    if best_of == 0 and score[0] > score[1]:
+        img = TextBox(frame, f"you won {score[0]} to {score[1]}").write()
+    elif best_of == 0 and score[0] == score[1]:
+        img = TextBox(frame, f"you drew with {score[0]} points each")
+    else:
+        img = TextBox(frame, f"you lost {score[1]} to {score[0]}")
