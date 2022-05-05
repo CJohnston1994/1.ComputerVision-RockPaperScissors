@@ -6,15 +6,16 @@ import manual_rps
 from classes import TextBox
 from time import time
 
-#
+# Load model, prep for video cap and create data array for preictive model
 model = load_model('Res/keras_model.h5')
 cap = cv2.VideoCapture(0)
 data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+
 # number of rounds
 best_of = 3
+
 # initialize score
 score  = [0,0]
-# Initialize time to choose
 
 def game_Loop():
     while best_of not in range(best_of, 0, -1):
