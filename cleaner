@@ -1,0 +1,75 @@
+import cv2 as cv2
+from keras.models import load_model
+import cv2 as cv2, numpy as np
+import manual_rps
+from time import time
+
+# globals
+font = cv2.FONT_HERSHEY_SIMPLEX
+cvline = cv2.LINE_AA
+color = [78,13,147]
+model = load_model('keras_model.h5')
+cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    print("Cannot open camera")
+    exit()
+data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+buffer = 3
+score = [0,0]
+
+def vid_cap():
+    ret, frame = cap.read()
+    # normalize the video feed to match the model data
+    resized_frame = cv2.resize(frame, (224, 224), interpolation = cv2.INTER_AREA)
+    image_np = np.array(resized_frame)
+    normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
+    data[0] = normalized_image
+    cv2.imshow('frame', frame)
+    return data, frame
+
+def game_ui(frame, score, round ):
+    img = cv2.putText(frame, f"Player", (5, 5), font, 1, color, 1, cvline)
+    img = cv2.putText(frame, f"RPS-BOT-3000", (5, 200), font, 1, color, 1, cvline)
+    img = cv2.putText(frame, f"[{score[0]}|{score[1]}]", (20, 110), font, 1, color, 1, cvline)
+    img = cv2.putText(frame, f"Round {round}")
+
+def get_player_choice(data):
+    options = ['Rock', 'Paper', 'Scissors', 'None']
+    prediction = model.predict(data)
+    return options[np.argmax(prediction)]
+
+def timer(frame, time):
+    mins, secs = divmod(time, 60)
+    timer_display = '{:02d}:{:02d}'.format(mins, secs)
+    img = cv2.putText(frame, f"the game will begin in |{timer_display}|", ( 5, 100), font, 1, color, 1, cvline)
+
+
+def play_game(n_rounds, time):
+    rounds = 0
+    while rounds < n_rounds:
+        e_time = time.time()-time
+        if cv2.waitKey(0) & 0xFF == ord('q'):
+            break
+        data, frame = vid_cap()
+        game_ui(frame, score)
+        player_choice = get_player_choice(data)
+        img = cv2.putText(frame, )
+        if e_time > 3:
+            computer_choice = manual_rps.get_computer_choice()
+            manual_rps.get_Winner(frame, player_choice, computer_choice, score)
+        if e_time > 6:
+            rounds += 1
+            continue
+    manual_rps.grand_Winner(frame, n_rounds, score)        
+
+if __name__ == "__main__":
+    s_time = time.time()
+    e_time = s_time + 1
+    count = e_time - s_time
+
+    while count < buffer:
+        e_time= time.time()
+        frame, data = vid_cap()
+        img = cv2.putText(frame, f"game will begin in {buffer-count}, seconds", (100, 20), font, 1, color, 1, cvline)
+    
+    play_game()
