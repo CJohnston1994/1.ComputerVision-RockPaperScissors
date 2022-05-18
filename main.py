@@ -36,6 +36,37 @@ game_round = 1
 score = [0,0]
 game_over = False
 
+class Game:
+    def __init__(self):
+        self.score = [0,0]
+        self.game_round = 0
+        self.player_choice = "Test"
+        self.computer_choice = "Test"
+        self.flag_c_choice = False
+        self.flag_p_choice = False
+        self.flag_final = False
+        self.start_time = time.time()
+
+    def game_UI(self, frame, data):
+
+    def get_choice_player(self, frame):
+        if not self.flag_p_choice:
+
+
+    def get_choice_computer():
+    
+    def compare_choice():
+
+    def get_winner():
+
+    def update_score():
+
+    def final_winner():
+
+    def playGame(self):
+        game_ui()
+        
+
 
 # display the game text to keep track of score and display messages
 def game_ui(frame, game_round):
@@ -52,11 +83,11 @@ def game_ui(frame, game_round):
         cv2.rectangle(frame, (,),(,), )
     if score[0] == 3:
         cv2.rectangle(frame, (,),(,), )
-    if score[0] >= 1:
+    if score[1] >= 1:
         cv2.rectangle(frame, (,),(,), )
-    if score[0] >= 2:
+    if score[1] >= 2:
         cv2.rectangle(frame, (,),(,), )
-    if score[0] == 3:
+    if score[1] == 3:
         cv2.rectangle(frame, (,),(,), color , 2, cvline)
 ''' 
 
@@ -186,7 +217,7 @@ def set_game_ending():
 ###################################################################################################################
 
 if __name__ == "__main__":
-    s_time = time.time()
+    start_time = time.time()
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -201,13 +232,13 @@ if __name__ == "__main__":
         e_time= time.time()
         
         # time until start
-        count = e_time - s_time
+        count = e_time - start_time
         buffer = 4
         
         if count < buffer:            
             cv2.putText(frame, f"game will begin in {int(buffer-count)}, seconds", (30, 30), font, 1, color, 2, cvline)
         elif count > 3 and game_over == False:
-            play_game(s_time+buffer)
+            play_game(start_time+buffer)
         elif game_over == True:
             final_time = set_game_ending(time.time())
             if final_time < time.time():
