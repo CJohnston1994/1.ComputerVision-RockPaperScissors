@@ -32,24 +32,23 @@ class Game:
         cv2.putText(frame, f"RPS-BOT", (480, 30), font, 1, color, 2, cvline)
         cv2.putText(frame, f"[{self.score[0]}|{self.score[1]}]", (280, 30), font, 1, color, 2, cvline)
         cv2.putText(frame, f"Round {self.game_round}",(10 , 460), font, 1, color, 2, cvline)
-        cv2.putText(frame, f"{elapsed_time}",(10 , 420), font, 1, color, 2, cvline)
-        # score ticks
-        '''
-        if self.score[0] >= 1:
-            cv2.rectangle(frame, (,),(,), )
-        if self.score[0] >= 2:
-            cv2.rectangle(frame, (,),(,), )
-        if self.score[0] == 3:
-            cv2.rectangle(frame, (,),(,), )
-        if self.score[1] >= 1:
-            cv2.rectangle(frame, (,),(,), )
-        if self.score[1] >= 2:
-            cv2.rectangle(frame, (,),(,), )
-        if self.score[1] == 3:
-            cv2.rectangle(frame, (,),(,), color , 2, cvline)
-    ''' 
 
-    def get_choice_player(self, frame, data):
+        # score ticks
+        if self.score[0] >= 1:
+            cv2.rectangle(frame, (245,5),(275,35), color, -1)
+        if self.score[0] >= 2:
+            cv2.rectangle(frame, (205,5),(235,35), color, -1)
+        if self.score[0] == 3:
+            cv2.rectangle(frame, (165,5),(195,35), color, -1)
+        if self.score[1] >= 1:
+            cv2.rectangle(frame, (360,5),(390,35), color, -1)
+        if self.score[1] >= 2:
+            cv2.rectangle(frame, (400,5),(430,35), color, -1)
+        if self.score[1] == 3:
+            cv2.rectangle(frame, (440,5),(470,35), color, -1)
+
+
+    def get_choice_player(self, data):
         if not self.flag_p_choice:
             self.player_choice = self.options[np.argmax(model.predict(data))]
             self.flag_p_choice = True
@@ -68,19 +67,19 @@ class Game:
                 self.score[1]+=1
 
         elif self.player_choice == 'Rock' and self.computer_choice == 'Paper':
-            cv2.putText(frame, f"Opponent picked {self.computer_choice}!", (150, 250), font, 1, color, 2, cvline)
+            cv2.putText(frame, f"Opponent picked {self.computer_choice}!", (200, 250), font, 1, color, 2, cvline)
             cv2.putText(frame, f"You Lose... Try Again!", (200, 300), font, 1, color, 2, cvline)
             if self.flag_score == False:
                 self.score[1]+=1
 
         elif self.player_choice == 'Paper' and self.computer_choice == 'Scissors':
-            cv2.putText(frame, f"Opponent picked {self.computer_choice}!", (150, 250), font, 1, color, 2, cvline)
+            cv2.putText(frame, f"Opponent picked {self.computer_choice}!", (200, 250), font, 1, color, 2, cvline)
             cv2.putText(frame, f"You Lose... Try Again!", (200, 300), font, 1, color, 2, cvline)
             if self.flag_score == False:
                 self.score[1]+=1
 
         elif self.player_choice == 'Scissors' and self.computer_choice == 'Rock':
-            cv2.putText(frame, f"Opponent picked {self.computer_choice}!", (150, 250), font, 1, color, 2, cvline)
+            cv2.putText(frame, f"Opponent picked {self.computer_choice}!", (200, 250), font, 1, color, 2, cvline)
             cv2.putText(frame, f"You Lose... Try Again!", (200, 300), font, 1, color, 2, cvline)        
             if self.flag_score == False:
                 self.score[1]+=1            
@@ -91,15 +90,14 @@ class Game:
         self.flag_score = True
 
     def final_winner(self, frame):
+
+        self.flag_final = True
         if self.score[0] > self.score[1] and self.score[0] > 2:
-            cv2.putText(frame, f"You win {self.score[0]} rounds to {self.score[1]}", (80, 110), font, 1, color,2, cvline)
-            self.flag_final = True
+            cv2.putText(frame, f"You won {self.score[0]} rounds to {self.score[1]}", (90, 110), font, 1, color,2, cvline)
         elif self.score[1] > self.score[0] and self.score[1] > 2:
-            print("You Lose")
-            self.flag_final = True
+            cv2.putText(frame, f"You lost {self.score[1]} rounds to {self.score[0]}", (80, 110), font, 1, color, 2, cvline)
         else:
-            print("draw")
-            self.flag_final = True
+            cv2.putText(frame, f"You drew with {self.score[0]} rounds each", (80, 110), font, 1, color, 2, cvline)
 
     '''
     if   score[0] >  score[1]:
@@ -118,32 +116,27 @@ class Game:
 
     def playGame(self, frame):
         elapsed_time = time.time()-self.start_time
-        if elapsed_time < 5:
+
+        if self.score[0] > 2 or self.score[1] > 2 and elapsed_time < 5:
+            self.final_winner(frame)
+        elif elapsed_time < 5:
             cv2.putText(frame, f"Starting in {int(5 - elapsed_time)}!",(10 , 420), font, 1, color, 2, cvline)
-        if elapsed_time > 5 and not self.flag_final:
+        elif elapsed_time > 5 and not self.flag_final:
             self.game_UI(frame)
             if elapsed_time > 5 and (4 - (elapsed_time-5)) > 0:
                 cv2.putText(frame, f"{int(4 - (elapsed_time-5))}!",(250 , 250), font, 3, color, 2, cvline)
             
             if elapsed_time > (5 + self.round_length - 10):
-                self.get_choice_player(frame, data)
+                self.get_choice_player(data)
                 cv2.putText(frame, f"{self.player_choice}", (10 , 200), font, 1, color, 2, cvline)
                 self.get_choice_computer()
                 cv2.putText(frame, f"{self.computer_choice}",(500 , 200), font, 1, color, 2, cvline)
             if elapsed_time > (5 + self.round_length - 5):
                 self.get_winner(frame)
-                cv2.putText(frame, "Winner",(200 , 200), font, 3, color, 2, cvline)
             if elapsed_time > 5 + self.round_length:
                 self.start_time = time.time() - 5
                 self.round_reset()
                 self.game_round += 1
-                
-        
-        if self.score[0] == 3 or self.score[1] == 3:
-            elapsed_time = time.time() - self.start_time()
-            if elapsed_time < 5:
-                print(self.start_time)
-                self.final_winner(frame)
 
 if __name__ == "__main__":
 
@@ -154,6 +147,9 @@ if __name__ == "__main__":
         image_np = np.array(resized_frame)
         normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
         data[0] = normalized_image
+
+        options = ["Rock", "Paper", "Scissors", "None"]
+        print(options[np.argmax(model.predict(data))])
 
         game.playGame(frame)
 
