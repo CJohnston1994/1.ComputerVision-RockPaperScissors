@@ -99,15 +99,6 @@ class Game:
         else:
             cv2.putText(frame, f"You drew with {self.score[0]} rounds each", (80, 110), font, 1, color, 2, cvline)
 
-    '''
-    if   score[0] >  score[1]:
-        cv2.putText(frame, f"You win {score[0]} rounds to {score[1]}", (80, 110), font, 1, color,2, cvline)
-    elif score[0] == score[1]:
-        cv2.putText(frame, f"you drew with {self.score[0]} rounds each", (80, 110), font, 1, color, 2, cvline)
-    elif score[0] <  score[1]:
-        cv2.putText(frame, f"you lost {self.score[1]} rounds to {self.score[0]}", (80, 110), font, 1, color, 2, cvline)
-    '''
-
     def round_reset(self):
         self.flag_c_choice = False
         self.flag_p_choice = False
